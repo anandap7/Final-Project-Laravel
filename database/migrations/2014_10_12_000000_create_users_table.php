@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->Integer('reputation')->nullable();            
+            $table->Integer('reputation')->default('0');            
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();     
         });

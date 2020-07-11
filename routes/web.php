@@ -32,3 +32,12 @@ Route::resource('/question','QuestionController');
 
 Route::get('/answer/my', 'AnswerController@mine');
 Route::resource('/answer','AnswerController');
+
+Route::get('/question/{question_id}/{uploader_id}/vote', 'QuestionVoteController@vote');
+Route::get('/question/{question_id}/{uploader_id}/unvote', 'QuestionVoteController@unvote');
+
+Route::get('/profile','HomeController@profile');
+
+Route::post('/QuestionComment','QuestionCommentController@store');
+Route::post('/AnswerComment','AnswerCommentController@store');
+

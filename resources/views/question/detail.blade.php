@@ -26,13 +26,32 @@
             <div class="row">
                 <div class="col-1">
                     <div class="text-center">
-                        <div><i class="fa fa-caret-up fa-2x text-secondary"></i></div>
-                        <span style="font-size: 24px;">0</span>
+                        <div><a href="/question/{{$question->id}}/{{$question->uploader_id}}/vote"><i class="fa fa-caret-up fa-2x text-secondary"></i></a></div>
+                        <span style="font-size: 24px;">{{$total}}</span>
                         <div style="font-size: 14px;">suara</div>
-                        <div><i class="fa fa-caret-down fa-2x text-secondary"></i></div>
+                        <div>
+                            @if(Auth::user()->reputation >= 15)<a href="/question/{{$question->id}}/{{$question->uploader_id}}/unvote"><i class="fa fa-caret-down fa-2x text-secondary"></i></a></div>
+                            @else
+                            <a href=""><i class="fa fa-caret-down fa-2x text-secondary"></i></a></div>
+                            @endif
                     </div>
                 </div>
-                <div class="col-11">{!!$question->content!!}</div>
+                <div class="col-11" >{!!$question->content!!} <br>
+                    @foreach ($QuestionComment as $key => $QuestionComment)
+                        <div class="col-11">
+                            <p><font size="2">Komentar {{ $QuestionComment->user->name }} : "{!! $QuestionComment->content !!}"</font></p>
+                        </div>
+                    @endforeach
+                    <form method="post" action="/QuestionComment">
+                        @csrf
+                        <div class="form-group">
+                            <input type="hidden" name="question_id" value="{{ $question->id }}">
+                            <label for="comment"></label>
+                            <textarea class="form-control" id="comment" rows="3" placeholder="Tulis Komentar" name="content"></textarea>
+                            <button type="submit" >Kirim</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -62,6 +81,16 @@
                         @if ($question->uploader_id == Auth::id())
                         <a href="">Tandai sebagai jawaban terbaik</a>
                         @endif
+                        <form method="post" action="/AnswerComment">
+                            @csrf
+                        <div class="form-group">
+                            <input type="hidden" name="question_id" value="{{ $question->id }}">
+                            <input type="hidden" name="answer_id" value="{{ $answer->id }}">
+                            <label for="comment"></label>
+                            <textarea class="form-control" id="comment" rows="3" placeholder="Tulis Komentar" name="content"></textarea>
+                            <button type="submit">Kirim</button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             @endforeach

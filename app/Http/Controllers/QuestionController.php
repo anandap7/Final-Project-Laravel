@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Question;
+use App\User;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class QuestionController extends Controller
     {
         $page = 'question';
         $questions = Question::all();
-    	return view('question.index', compact('questions', 'page'));
+    	return view('question.index', compact('questions', 'page',));
     }
 
     public function mine()
@@ -64,13 +65,15 @@ class QuestionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Question  $question
+     * @param  \App\Question  $question 
      * @return \Illuminate\Http\Response
      */
     public function show(Question $question)
     {
         $page = 'question';
         $answers = $question->answers;
+        $total = count($question->vote) - count($question->unvote) ;
+        $QuestionComment = $question->comment;
         foreach ($answers as $answer) {
             $date = new DateTime($answer->created_at);
             $now = new DateTime();
@@ -82,7 +85,7 @@ class QuestionController extends Controller
             else if($diff->format('%i') != 0) $answer->diff = $diff->format('%i minutes ago');
             else if($diff->format('%s') != 0) $answer->diff = $diff->format('%s seconds ago');
         }
-        return view('question.detail', compact('question', 'answers', 'page'));
+        return view('question.detail', compact('question', 'answers', 'page','total','QuestionComment'));
     }
 
     /**
@@ -126,4 +129,6 @@ class QuestionController extends Controller
 
     	return redirect('/question/my');
     }
+
+
 }

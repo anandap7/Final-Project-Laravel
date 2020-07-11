@@ -12,7 +12,7 @@
         <div class="row m-1 p-1" style="border-bottom: 1px solid gray">
             <div class="col-1">
                 <div class="text-center">
-                    <span style="font-size: 24px;">0</span>
+                    <span style="font-size: 24px;">{{count($question->vote)- count($question->unvote)}}</span>
                     <div style="font-size: 14px;">dukungan</div>
                 </div>
                 <div class="text-center">

@@ -17,4 +17,19 @@ class Question extends Model
     {
         return $this->hasMany('App\Answer', 'question_id');
     }
+
+    public function vote()
+    {
+    	return $this->hasMany('App\QuestionVote', 'question_id')->where('value','1');
+    }
+
+    public function unvote()
+    {
+    	return $this->hasMany('App\QuestionVote', 'question_id')->where('value','-1');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany('App\QuestionComment', 'question_id');
+    }
 }
