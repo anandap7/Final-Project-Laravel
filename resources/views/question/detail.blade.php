@@ -1,56 +1,125 @@
 @extends('layouts.master')
 
+@push('script-head')
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+@endpush
+
 @section('content')
+<section class="content-header">
+    <h3>{{ $question->title }}</h3>
+    </span>
+</section>
 
 <section class="content">
-  <div class="card" >
-  
-  	@foreach($question as $key=>$item)
-    <div class="card-header">
-    <h3 class="card-title">Judul : {{$item->title}}</h3>
-  </div>
-   <div class="card-body">
-    <p class="card-text">Pertanyaan : {{$item->content}} <br><br></p>
+    <div class="card">
+        <div class="card-header">
+            <span class="text-sm">
+                <i class="far fa-clock"></i> Dibuat pada {{ date_format(date_create($question->created_at), 'd M Y H:i') }}
+            </span> &nbsp;
+            <span class="text-sm">
+                <i class="fas fa-history"></i> Terakhir diubah pada {{ date_format(date_create($question->updated_at), 'd M Y H:i') }}
+            </span><br>
+            <span class="text-sm">
+                <i class="far fa-user"></i> Ditanyakan oleh {{ $question->user->name }}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-1">
+                    <div class="text-center">
+                        <div><i class="fa fa-caret-up fa-2x text-secondary"></i></div>
+                        <span style="font-size: 24px;">0</span>
+                        <div style="font-size: 14px;">suara</div>
+                        <div><i class="fa fa-caret-down fa-2x text-secondary"></i></div>
+                    </div>
+                </div>
+                <div class="col-11">{!!$question->content!!}</div>
+            </div>
+        </div>
+    </div>
 
-    <p class="card-text"><font size ="2">Tanggal dibuat : {{$item->created_at}}</font></p>
-    <p class="card-text"><font size ="2">Tanggal diperbarui : {{$item->updated_at}} </font><br></p>
-  </div>
-  <div class="card-body">
-    <p class="card-text">Buat Jawaban :</p>
-               <form action="{{ url ('/answer/'.$item->id)}}" method="POST" class="form-inline">
-                  @csrf
-                  <input hidden name="id_pertanyaan" value="{{$item->id}}">
-                  <div class="form-group">
-                  <label for="inputPassword2" class="sr-only">Jawaban</label>
-                  <input type="text" class="form-control" placeholder="Tulis jawaban" id="content" name="content" style="width:60rem" >
-                  </div>
-                  <button type="submit" class="btn btn-primary" >Submit</button>                
-                </form>
+    <div class="card">
+        @if (count($question->answers) == 0)
+        <div class="card-body text-center">
+            <h5 class="text-info">Belum ada jawaban</h5>
+            Jadilah yang pertama untuk menjawab
+        </div>
+        @else
+        <div class="card-header">Jawaban</div>
+        <div class="card-body">
+            @foreach ($answers as $key => $answer)
+                <div class="row p-1" style="border-bottom: 1px solid gray">
+                    <div class="col-1">
+                        <div class="text-center">
+                            <div><i class="fa fa-caret-up fa-2x text-secondary"></i></div>
+                            <span style="font-size: 24px;">0</span>
+                            <div style="font-size: 14px;">suara</div>
+                            <div><i class="fa fa-caret-down fa-2x text-secondary"></i></div>
+                        </div>
+                    </div>
+                    <div class="col-11">
+                        <p>{{ $answer->user->name }} &bull; <span class="text-secondary">{{ $answer->diff }}</span></p>
+                        <p>{!! $answer->content !!}</p>
+                        @if ($question->uploader_id == Auth::id())
+                        <a href="">Tandai sebagai jawaban terbaik</a>
+                        @endif
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        @endif
+    </div>
 
-              
-  </div>
-  	@endforeach
-  <ul class="list-group list-group-flush">
-  	@foreach($answer as $key=>$item)
-    <li class="list-group-item">Jawaban : {{$item->content}}</li>
-    @endforeach
-  </ul>
-  <div class="card-body">
-  	@foreach($question as $key=>$item)
-    <form method="POST" action="/question/{{$item->id}}/edit" style="display: inline">
-    	@csrf
-    	@method('GET')
-    <button type="submit" class="btn btn-sm btn-success">Ubah</button>
-	</form>
-    
-    <form method="POST" action="/question/{{$item->id}}" style="display: inline">
-    	@csrf
-    	@method('DELETE')
-    <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-	</form>
-    @endforeach
-  </div>
-
-  </div>
+    <div class="text-center">
+    @guest
+        <a href="/login" class="btn btn-primary">Tulis Jawaban</a>
+    @else
+        <h5>Tulis Jawaban</h5>
+        <form action="/answer" method="post">
+            @csrf
+            <input type="hidden" name="question_id" value="{{ $question->id }}">
+            <textarea name="content" class="form-control my-editor">{!! old('content', $content ?? '') !!}</textarea>
+            <button type="submit" class="btn btn-success mt-2">Kirim</button>
+        </form>
+    @endguest
+    </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    var editor_config = {
+        path_absolute : "/",
+        selector: "textarea.my-editor",
+        plugins: [
+            "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+            "searchreplace wordcount visualblocks visualchars code fullscreen",
+            "insertdatetime media nonbreaking save table contextmenu directionality",
+            "emoticons template paste textcolor colorpicker textpattern"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image media",
+        relative_urls: false,
+        file_browser_callback : function(field_name, url, type, win) {
+            var x = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+            var y = window.innerHeight|| document.documentElement.clientHeight|| document.getElementsByTagName('body')[0].clientHeight;
+
+            var cmsURL = editor_config.path_absolute + 'laravel-filemanager?field_name=' + field_name;
+            if (type == 'image') {
+                cmsURL = cmsURL + "&type=Images";
+            } else {
+                cmsURL = cmsURL + "&type=Files";
+            }
+
+            tinyMCE.activeEditor.windowManager.open({
+            file : cmsURL,
+            title : 'Filemanager',
+            width : x * 0.8,
+            height : y * 0.8,
+            resizable : "yes",
+            close_previous : "no"
+            });
+        }
+    };
+
+    tinymce.init(editor_config);
+</script>
+@endpush

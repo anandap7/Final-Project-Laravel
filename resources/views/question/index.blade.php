@@ -1,42 +1,31 @@
-
-
 @extends('layouts.master')
 
 @section('content')
-<section class="content"> 
-  <div class="card">
-    <div class="card-header">
-      <h3 class="card-title">List Pertanyaan</h3>
-    </div>
-    <div class="card-body">     
-      <div class="container-md">
-      	<table>
-      		<table class="table table-dark table-striped">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Judul</th>
-            </tr>
-          </thead>
-          <tbody>
-          	@foreach($question as $key => $item)
-            <tr>
-              <td>{{$key + 1}}</td>
-              <td>{{$item->title}}</td>
-              <td>
-                <form method="POST" action="/question/{{$item->id}}" style="display: inline">
-                  @csrf
-                  @method('GET')
-                  <button type="submit" class="btn btn-sm btn-success">Lihat</button>
-                </form>
-              </td>
-            </tr>
-            @endforeach      
-          </tbody>
-        </table>
-      </table>
-    </div>
-  </div>  
-</div>
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1 style="display: inline;">List Pertanyaan</h1>
+    <a href="/question/create" class="btn btn-primary float-right">Buat Pertanyaan</a>
+</section>
+
+<section class="content">
+    @foreach ($questions as $key => $question)
+        <div class="row m-1 p-1" style="border-bottom: 1px solid gray">
+            <div class="col-1">
+                <div class="text-center">
+                    <span style="font-size: 24px;">0</span>
+                    <div style="font-size: 14px;">dukungan</div>
+                </div>
+                <div class="text-center">
+                    <span style="font-size: 24px;">{{ count($question->answers) }}</span>
+                    <div style="font-size: 14px;">jawaban</div>
+                </div>
+            </div>
+            <div class="col-11">
+                <a href="/question/{{ $question->id }}">{{ $question->title }}</a>
+                <p>{!! $question->content !!}</p>
+                <p class="text-secondary float-right">ditanyakan oleh {{ $question->user->name }}</p>
+            </div>
+        </div>
+    @endforeach
 </section>
 @endsection

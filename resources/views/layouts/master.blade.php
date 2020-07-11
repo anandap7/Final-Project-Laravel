@@ -1,64 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Forum Tanya-Jawab</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-  <!-- overlayScrollbars -->
-  <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
-  <!-- Google Font: Source Sans Pro -->
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <title>Forum Tanya-Jawab</title>
 
-  @stack('styles')
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{ asset('adminlte/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
+    @stack('styles')
+
+    @stack('script-head')
 </head>
-<body class="hold-transition sidebar-mini">
-<!-- Site wrapper -->
-<div class="wrapper">
-  <!-- Navbar -->
-  @include('layouts._navbar')
-  <!-- /.navbar -->
+<body class="hold-transition layout-top-nav layout-navbar-fixed">
+    <div class="wrapper">
 
-  <!-- Main Sidebar Container -->
-  @include('layouts._sidebar')
+        <!-- Navbar -->
+        @include('layouts._navbar')
+        <!-- /.navbar -->
 
-  <!-- Content Wrapper. Contains page content -->
-  
-
-  <div class="content-wrapper">
-    <section class="content-header bg-transparent">
-      <div class="container-fluid bg-transparent">
-        <div class="row mb-2 bg-transparent">
-        
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper" style="background-color: white;">
+            <div class="container">
+                <div class="row">
+                    @if (Request::is(['login', 'register']))
+                    <div class="col-12">
+                        @yield('content')
+                    </div>
+                    @else
+                    <div class="col-2">
+                        @include('layouts._sidebar')
+                    </div>
+                    <div class="col-10" style="border-left: 1px solid gray;">
+                        @yield('content')
+                    </div>
+                    @endif
+                </div>
+            </div>
         </div>
-      </div><!-- /.container-fluid -->
-    </section>
-    @yield('content')
-  </div>
-  <!-- /.content-wrapper -->
+        <!-- /.content-wrapper -->
 
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b>Version</b> 3.0.5
+        <!-- Main Footer -->
+        <footer class="main-footer mt-5">
+            <!-- To the right -->
+            <div class="float-right d-none d-sm-inline">
+            Anything you want
+            </div>
+            <!-- Default to the left -->
+            <strong>Copyright &copy; 2014-2019 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        </footer>
     </div>
-    <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
-    reserved.
-  </footer>
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
 <!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
 <script src="{{ asset('adminlte/plugins/jquery/jquery.min.js') }}"></script>
@@ -66,8 +66,6 @@
 <script src="{{ asset('adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('adminlte/dist/js/adminlte.min.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
 
 @stack('scripts')
 

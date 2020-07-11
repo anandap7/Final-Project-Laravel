@@ -8,30 +8,16 @@
 <section class="content">
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">Tulis Pertanyaan</h3>
+      <h3 class="card-title">Tulis Jawaban</h3>
     </div>
     <div class="card-body">
-      <form action="@if(Request::is('question/*/edit')) /question/{{ $question->id }}
-      @else /question @endif" method="POST">
-        @csrf
-        @if (Request::is('question/*/edit'))
+        <form action="/answer/{{ $answer->id }}" method="post">
+            @csrf
             @method('PUT')
-        @endif
-        <div class="form-group">
-          <label for="title">Judul</label>
-          <input type="text" class="form-control" placeholder="Tulis Judul" id="title" name="title" value="{{ $question->title ?? '' }}">
-        </div>
-        <div class="form-group">
-          <label for="isi">Pertanyaan</label>
-          <textarea name="content" class="form-control my-editor">{!! $question->content ?? '' !!}</textarea>
-        </div>
-        <div class="form-group">
-          <label for="tags">Tag</label>
-          <input type="text" class="form-control" placeholder="Tulis tag" id="tags" name="tags" value="{{ $question->tags ?? '' }}">
-        </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+            <input type="hidden" name="answer_id" value="{{ $answer->id }}">
+            <textarea name="content" class="form-control my-editor">{!! $answer->content !!}</textarea>
+            <button type="submit" class="btn btn-success mt-2">Kirim</button>
+        </form>
     </div>
   </div>
 </section>

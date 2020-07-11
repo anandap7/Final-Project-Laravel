@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateQuestionCommentsTable extends Migration
+class AddContentColumnToAnswerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateQuestionCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('question_comments', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->Integer('question_id');
-            
-            $table->timestamps();
+        Schema::table('answer', function (Blueprint $table) {
+            $table->string('content');
         });
     }
 
@@ -28,6 +25,8 @@ class CreateQuestionCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('question_comments');
+        Schema::table('answer', function (Blueprint $table) {
+            $table->dropColumn('content');
+        });
     }
 }

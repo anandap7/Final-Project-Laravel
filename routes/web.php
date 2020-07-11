@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.welcome');
-});
+use App\Http\Controllers\QuestionController;
+
+Route::redirect('/', 'question', 301);
 
 Route::get('blank', function () {
     return view('pages.blank');
@@ -23,10 +23,12 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/question','QuestionController@index');
+Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 
-Route::get('/question/create','QuestionController@create');
+Route::get('/question/my', 'QuestionController@mine');
+Route::resource('/question','QuestionController');
 
-Route::POST('/question', 'QuestionController@store');
-
-Route::get('/question/{id}' ,'QuestionController@show');
+Route::get('/answer/my', 'AnswerController@mine');
+Route::resource('/answer','AnswerController');
