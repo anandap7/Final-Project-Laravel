@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 3 | Blank Page</title>
+  <title>Forum Tanya-Jawab</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -30,7 +30,16 @@
   @include('layouts._sidebar')
 
   <!-- Content Wrapper. Contains page content -->
+  
+
   <div class="content-wrapper">
+    <section class="content-header bg-transparent">
+      <div class="container-fluid bg-transparent">
+        <div class="row mb-2 bg-transparent">
+        
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
     @yield('content')
   </div>
   <!-- /.content-wrapper -->

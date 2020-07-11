@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.welcome');
 });
 
 Route::get('blank', function () {
@@ -22,3 +22,11 @@ Route::get('blank', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/question','QuestionController@index');
+
+Route::get('/question/create','QuestionController@create');
+
+Route::POST('/question', 'QuestionController@store');
+
+Route::get('/question/{id}' ,'QuestionController@show');
